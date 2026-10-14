@@ -16,7 +16,7 @@ BANDWIDTH = 0.05  # frozen: validation-selected
 
 data = load_split_scaled()
 Xtr, Xte = data["train"], data["test"]
-labels = np.loadtxt("../labels.csv", dtype=int)
+labels = np.loadtxt("labels.csv", dtype=int)
 classes = sorted(set(labels) - {-1})
 xx, yy, grid_points = make_grid()
 
