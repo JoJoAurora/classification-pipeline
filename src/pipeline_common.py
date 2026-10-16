@@ -49,29 +49,6 @@ def cluster_names(labels, y):
         names[c] = str(vals[counts.argmax()])
     return names
 
-
-# def load_dataset(csv_path=None):
-#     """Raw 2-D features: two crescents and a ring, plus uniform noise.
-#
-#     The shapes are the point. A crescent's centroid sits off the crescent
-#     and a ring's sits in its hole, so no centre-based method can describe
-#     them -- which is why the pipeline starts with DBSCAN. The three shapes
-#     sit at well-separated centres so DBSCAN recovers them at a stable eps
-#     even after the 60% training split thins the data.
-#     """
-#     if csv_path is not None:
-#         return np.loadtxt(csv_path, delimiter=",")
-#
-#     rng = np.random.default_rng(SEED)
-#     smile = _arc(rng, 0.0, 0.0, 1.8, 200, 340, 340, 0.11)  # opens upward
-#     frown = _arc(rng, 0.0, 3.2, 1.8, 20, 160, 300, 0.11)   # opens downward
-#     ring = _arc(rng, 4.8, 1.6, 2.0, 0, 360, 300, 0.11)     # closed loop
-#
-#     X = np.vstack([smile, frown, ring])
-#     noise = rng.uniform(X.min(axis=0) - 0.4, X.max(axis=0) + 0.4, size=(90, 2))
-#     return np.vstack([X, noise])
-
-
 def scale_features(X, bounds=None):
     """Min-max each feature onto [0, 1]. Returns (X_scaled, bounds).
 
@@ -92,17 +69,6 @@ def split_data(X, y, seed=SEED):
     return (X_train, y_train), (X_val, y_val), (X_test, y_test)
 
 
-# def split_data(X, seed=SEED):
-#     """Split raw points into (train, val, test), 60/20/20, fixed seed.
-#
-#     Reproducible because the seed is fixed: anyone re-running gets the same
-#     three subsets, which is what makes the reported test number checkable.
-#     """
-#     train, rest = train_test_split(X, train_size=TRAIN_FRAC, random_state=seed)
-#     val, test = train_test_split(rest, test_size=0.5, random_state=seed)
-#     return train, val, test
-
-
 # Load scaled dataset for Assignment 1.
 def load_split_scaled(seed=SEED):
     """Load raw points, split, and scale every subset by TRAIN's bounds."""
@@ -117,23 +83,6 @@ def load_split_scaled(seed=SEED):
         "test": test_s, "y_test": y_test,
         "bounds": bounds,
     }
-
-
-# def load_split_scaled(seed=SEED):
-#     """Load raw points, split, and scale every subset by TRAIN's bounds.
-#
-#     The bounds come from training data alone -- they ship with the model,
-#     so validation and test points are scaled by them, not by their own
-#     range. Held-out points may therefore land slightly outside [0, 1];
-#     that is honest, and the grid lookup clips them into the edge cells.
-#     Returns a dict: scaled train/val/test arrays plus the shared bounds.
-#     """
-#     train, val, test = split_data(load_dataset(), seed)
-#     train_s, bounds = scale_features(train)
-#     val_s, _ = scale_features(val, bounds)
-#     test_s, _ = scale_features(test, bounds)
-#     return {"train": train_s, "val": val_s, "test": test_s, "bounds": bounds}
-
 
 def make_grid():
     """Cell centres of the GRID_N x GRID_N grid covering [0, 1]^2."""
